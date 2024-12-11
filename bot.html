@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Travel Bot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: nowrap;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--button-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            padding: 5px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .theme-toggle:hover {
+            border-color: #f39c12;
+        }
+
+        .left-side {
+            flex: 2 1 40%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            padding: 20px;
+            border-right: 2px solid var(--border-color);
+            text-align: center;
+        }
+
+        .game-area {
+            width: 100%;
+            height: 80%;
+            background-color: var(--game-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .game-area:hover {
+            border-color: #3498db;
+        }
+
+        .Live{
+            color:pink;
+        }
+
+        .live-users {
+            background-color: var(--game-bg);
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+            text-align: center;
+            border: 2px solid var(--border-color);
+        }
+
+        .live-users:hover {
+            border-color: #e74c3c;
+        }
+
+        .right-side {
+            flex: 3 1 60%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-box {
+            flex: 1;
+            background-color: var(--game-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-box:hover {
+            border-color: #8e44ad;
+        }
+
+        .messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            word-wrap: break-word;
+        }
+
+        .bot {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .user {
+            background-color: #555;
+            color: #fff;
+            text-align: right;
+        }
+
+        .input-area {
+            display: flex;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .input-area input {
+            flex-grow: 1;
+            padding: 10px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border: none;
+            outline: none;
+        }
+
+        .input-area button {
+    background-color: var(--button-bg);
+    border: 2px solid transparent; /* Remove borders on all sides */
+    border-left: 2px solid var(--border-color); /* Add border only on the left */
+    color: var(--text-color);
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+        .input-area button:hover {
+            border-color: #1abc9c;
+        }
+
+        .input-area button:before {
+             content: '↑';
+            font-size: 20px;
+        }
+
+        .explore-section {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .category {
+            border: 2px solid var(--border-color);
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+        }
+
+        .category:hover {
+            border-color: #c0392b;
+        }
+
+        :root {
+            --background-color: #000;
+            --text-color: #fff;
+            --border-color: #fff;
+            --game-bg: #111;
+            --input-bg: #000;
+            --button-bg: #000;
+        }
+
+        .light-mode {
+            --background-color: #fff;
+            --text-color: #000;
+            --border-color: #000;
+            --game-bg: #f9f9f9;
+            --input-bg: #fff;
+            --button-bg: #fff;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        /* Media Query for Mobile View */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left-side {
+                flex: 1;
+                border-right: none;
+                padding: 10px;
+            }
+
+            .right-side {
+                flex: 1;
+                padding: 10px;
+            }
+
+            .game-area {
+                height: 60%;
+            }
+
+            .messages {
+                padding: 15px;
+            }
+
+            .input-area input {
+                padding: 8px;
+            }
+
+            .category {
+                flex: 1 1 45%;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left-side,
+            .right-side {
+                flex: 1;
+                width: 100%;
+            }
+
+            .game-area {
+                height: 50%;
+            }
+
+            .theme-toggle {
+                padding: 3px 10px;
+            }
+
+            .messages {
+                padding: 10px;
+            }
+
+            .category {
+                flex: 1 1 100%;
+            }
+
+            .input-area input {
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+    <div class="container">
+        <div class="left-side">
+            <h2>Travel Map</h2>
+            <div class="game-area" onclick="collectReward()">
+                <p>Find rewards 🎮</p>
+                <p id="points">Total Points: 0</p>
+            </div>
+            <div class="live-users">
+                <p class="Live">Live Players:</p>
+                <p>Aman, Praneeth, Sathwik</p>
+            </div>
+        </div>
+
+        <div class="right-side">
+            <div class="chat-box">
+                <div class="messages" id="messages">
+                    <div class="message bot">Hi! I'm your travel guide. Ask me anything!</div>
+                </div>
+                <div class="input-area">
+                    <input type="text" id="userInput" placeholder="Type here..." onkeypress="handleKeyPress(event)">
+                    <button onclick="sendMessage()"></button><!--Arrow as send button-->
+                </div>
+            </div>
+
+            <div class="explore-section">
+                <div class="category"> Temples</div>
+                <div class="category"> Parks</div>
+                <div class="category"> Buses</div>
+                <div class="category"> Hotels</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let totalPoints = 0;
+        const audio = new Audio('https://www.soundjay.com/button/sounds/button-3.mp3');
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const themeText = document.body.classList.contains('light-mode') ? '🌞 Light Mode' : '🌙 Dark Mode';
+            document.querySelector('.theme-toggle').textContent = themeText;
+        }
+
+        function collectReward() {
+            const points = Math.floor(Math.random() * 50) + 1;
+            totalPoints += points;
+            document.getElementById('points').textContent = `Total Points: ${totalPoints}`;
+            audio.play();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput').value.trim();
+            if (input) {
+                addMessage(input, 'user');
+                setTimeout(() => addMessage('Let’s explore the world! 🌍', 'bot'), 1000);
+                document.getElementById('userInput').value = '';
+            }
+        }
+
+        function addMessage(text, type) {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message', type);
+            msgDiv.textContent = text;
+            document.getElementById('messages').appendChild(msgDiv);
+            document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>
